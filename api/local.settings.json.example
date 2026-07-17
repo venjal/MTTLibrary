@@ -3,7 +3,7 @@
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "node",
     "AzureWebJobsStorage": "",
-    "AZURE_STORAGE_CONNECTION_STRING": "",
+    "AZURE_STORAGE_ACCOUNT_NAME": "",
     "VIDEOS_CONTAINER": "videos",
     "EBOOKS_CONTAINER": "ebooks",
     "PUBLIC_CONTAINER": "false"

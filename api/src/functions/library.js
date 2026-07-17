@@ -17,10 +17,14 @@
 //  }
 //
 //  App settings used:
-//    AZURE_STORAGE_CONNECTION_STRING  (required) storage connection string
-//    VIDEOS_CONTAINER                 (optional) container name, default "videos"
-//    EBOOKS_CONTAINER                 (optional) container name, default "ebooks"
-//    PUBLIC_CONTAINER                 (optional) "true" => direct blob URLs
+//    AZURE_STORAGE_ACCOUNT_NAME  (required) storage account name (no key/secret)
+//    VIDEOS_CONTAINER            (optional) container name, default "videos"
+//    EBOOKS_CONTAINER            (optional) container name, default "ebooks"
+//    PUBLIC_CONTAINER            (optional) "true" => direct blob URLs
+//
+//  Auth: uses the Function's managed identity (via DefaultAzureCredential) —
+//  no storage account key anywhere, so this keeps working even if an Azure
+//  Policy disables shared-key (`allowSharedKeyAccess`) on the account.
 // =========================================================================
 
 const { app } = require("@azure/functions");
@@ -33,7 +37,7 @@ app.http("library", {
   authLevel: "anonymous",
   route: "library",
   handler: async (request, context) => {
-    const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+    const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
     const videosContainer = process.env.VIDEOS_CONTAINER || "videos";
     const ebooksContainer = process.env.EBOOKS_CONTAINER || "ebooks";
     const isPublic =
@@ -45,7 +49,7 @@ app.http("library", {
       for (const category of CATEGORIES) {
         const [videosResult, ebooksResult] = await Promise.all([
           listContainerBlobs({
-            connectionString,
+            accountName,
             containerName: videosContainer,
             isPublic,
             extensionRegex: /\.mp4$/i,
@@ -53,7 +57,7 @@ app.http("library", {
             context,
           }),
           listContainerBlobs({
-            connectionString,
+            accountName,
             containerName: ebooksContainer,
             isPublic,
             extensionRegex: /\.html?$/i,

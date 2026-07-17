@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@azure/functions": "^4.5.0",
+    "@azure/identity": "^4.4.1",
     "@azure/storage-blob": "^12.24.0"
   },
   "devDependencies": {}
