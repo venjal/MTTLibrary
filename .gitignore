@@ -1,0 +1,24 @@
+# Local Functions settings — DO NOT COMMIT real secrets
+local.settings.json
+
+# Dependencies
+node_modules/
+
+# Azure Functions build output
+bin/
+obj/
+.python_packages/
+
+# Logs
+*.log
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vscode/*.log
+.aiv-*
+
+# Local source copies already uploaded to Azure Blob Storage — the deployed
+# app fetches everything live from storage, these aren't served as static assets.
+*.mp4
+/ebooks/

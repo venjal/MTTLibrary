@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Microsoft Trainer Library — AI and Copilot training videos and ebooks." />
+  <title>Microsoft Trainer Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Animated grid/particle backdrop rendered on a canvas (no libraries) -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- Hero header -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="badge">◇ MICROSOFT TRAINER LIBRARY</div>
+      <h1 class="hero-title">Microsoft Trainer <span class="dot">·</span> Library</h1>
+      <p class="hero-tagline">
+        AI and Copilot training videos and ebooks — drop a file in storage,
+        it's live.
+      </p>
+
+      <!-- Real-time search -->
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 21l-4.3-4.3M11 18a7 7 0 100-14 7 7 0 000 14z"
+                fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" />
+        </svg>
+        <input
+          id="search"
+          type="search"
+          class="search-input"
+          placeholder="Search AI and Copilot videos and ebooks by title…"
+          aria-label="Search AI and Copilot videos and ebooks by title"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content: category tabs, each with a video + ebook grid -->
+  <main class="container">
+    <!-- Status line: count / loading / errors -->
+    <div id="status" class="status" role="status" aria-live="polite">Loading library…</div>
+
+    <!-- Family tabs -->
+    <div class="tabs" role="tablist" aria-label="Content family">
+      <button
+        id="tab-ai"
+        class="tab tab-ai active"
+        type="button"
+        role="tab"
+        aria-selected="true"
+        aria-controls="panel-ai"
+        data-category="ai"
+      >
+        AI
+        <span id="badge-ai" class="tab-badge" hidden></span>
+      </button>
+      <button
+        id="tab-copilot"
+        class="tab tab-copilot"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-controls="panel-copilot"
+        data-category="copilot"
+        tabindex="-1"
+      >
+        Copilot
+        <span id="badge-copilot" class="tab-badge" hidden></span>
+      </button>
+    </div>
+
+    <!-- AI panel -->
+    <section
+      id="panel-ai"
+      class="tab-panel"
+      role="tabpanel"
+      aria-labelledby="tab-ai"
+      data-category="ai"
+    >
+      <section class="section" aria-labelledby="ai-videos-heading">
+        <h2 id="ai-videos-heading" class="section-heading">▶ Videos</h2>
+        <section id="ai-videos-grid" class="grid" aria-label="AI video collection"></section>
+        <div id="ai-videos-empty" class="empty" hidden>
+          <div class="empty-glyph">⧉</div>
+          <h3>No AI videos yet</h3>
+          <p>Drop an <code>.mp4</code> into <code>videos/ai/</code> to see it here.</p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="ai-ebooks-heading">
+        <h2 id="ai-ebooks-heading" class="section-heading">📖 Ebooks</h2>
+        <section id="ai-ebooks-grid" class="grid" aria-label="AI ebook collection"></section>
+        <div id="ai-ebooks-empty" class="empty" hidden>
+          <div class="empty-glyph">⧉</div>
+          <h3>No AI ebooks yet</h3>
+          <p>Drop an <code>.html</code> into <code>ebooks/ai/</code> to see it here.</p>
+        </div>
+      </section>
+    </section>
+
+    <!-- Copilot panel -->
+    <section
+      id="panel-copilot"
+      class="tab-panel"
+      role="tabpanel"
+      aria-labelledby="tab-copilot"
+      data-category="copilot"
+      hidden
+    >
+      <section class="section" aria-labelledby="copilot-videos-heading">
+        <h2 id="copilot-videos-heading" class="section-heading">▶ Videos</h2>
+        <section id="copilot-videos-grid" class="grid" aria-label="Copilot video collection"></section>
+        <div id="copilot-videos-empty" class="empty" hidden>
+          <div class="empty-glyph">⧉</div>
+          <h3>No Copilot videos yet</h3>
+          <p>Drop an <code>.mp4</code> into <code>videos/copilot/</code> to see it here.</p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="copilot-ebooks-heading">
+        <h2 id="copilot-ebooks-heading" class="section-heading">📖 Ebooks</h2>
+        <section id="copilot-ebooks-grid" class="grid" aria-label="Copilot ebook collection"></section>
+        <div id="copilot-ebooks-empty" class="empty" hidden>
+          <div class="empty-glyph">⧉</div>
+          <h3>No Copilot ebooks yet</h3>
+          <p>Drop an <code>.html</code> into <code>ebooks/copilot/</code> to see it here.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Powered by Azure Static Web Apps · Functions · Blob Storage</span>
+  </footer>
+
+  <!-- Accessible video lightbox / modal -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true"
+       aria-labelledby="modal-title" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-panel" role="document">
+      <div class="modal-head">
+        <h2 id="modal-title" class="modal-title">Playing</h2>
+        <button id="modal-close" class="modal-close" data-close aria-label="Close player">✕</button>
+      </div>
+      <div class="modal-video">
+        <video id="player" controls playsinline preload="metadata"></video>
+        <iframe id="reader" class="reader-frame" title="Ebook reader"
+                sandbox="allow-scripts allow-popups" hidden></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

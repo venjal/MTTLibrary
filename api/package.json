@@ -1,0 +1,14 @@
+{
+  "name": "ai-lab-video-library-api",
+  "version": "1.0.0",
+  "description": "Azure Functions API that lists .mp4 videos from Blob Storage for the AI Lab Video Library.",
+  "main": "src/functions/*.js",
+  "scripts": {
+    "start": "func start"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.5.0",
+    "@azure/storage-blob": "^12.24.0"
+  },
+  "devDependencies": {}
+}
