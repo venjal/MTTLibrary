@@ -622,6 +622,9 @@ body {
 
 /* ------------------------------------------------------------ Footer --- */
 .footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   text-align: center;
   padding: 28px 20px 40px;
   color: var(--text-dim);
