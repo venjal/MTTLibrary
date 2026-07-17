@@ -196,8 +196,6 @@
         <div class="card-actions">
           <button class="btn ${actionClass}" type="button"
                   data-url="${url}" data-title="${title}" data-type="${type}">${actionLabel}</button>
-          <a class="btn btn-download" href="${url}"
-             download="${filename}" rel="noopener">⬇ Download</a>
         </div>
       </article>`;
   }
